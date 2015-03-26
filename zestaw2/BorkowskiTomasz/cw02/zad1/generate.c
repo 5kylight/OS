@@ -26,17 +26,15 @@ int main(int argc, char *argv[])
 
 	srand(time(NULL));
 
-
 	// C librarys way
-
 	FILE *file;
 	file = fopen(name,"w");
 	if(file == NULL ){
 		printf("Can't open file for writing, \n");
 		return 1;
 	}
-	for ( int i = 0 ; i < number_of_records ; i++){
-		for(int j = 0 ; j < record_size -1 ; j++ ){
+	for(int i = 0; i < number_of_records; i++){
+		for(int j = 0; j < record_size - 1; j++ ){
 			buf = '0' + (rand()%60);
 			fwrite(&buf,1,sizeof(buf),file);			
 		}
@@ -46,12 +44,10 @@ int main(int argc, char *argv[])
 
 	return 0;	
 
-
 	// System funs way
 	char *newname = (char*)malloc(sizeof(char)*(strlen(name)+1));
 	strcpy(newname,name);
-	newname[strlen(newname)]='1';
-
+	newname[strlen(newname)]= '1';
 
 	int file_d = open(newname, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP  );
 
@@ -59,18 +55,12 @@ int main(int argc, char *argv[])
     	printf("Can't open or create file\n");
     	return 1;
     }
- 	
 
- 	for ( int i = 0 ; i < number_of_records ; i++){
+ 	for(int i = 0 ; i < number_of_records ; i++){
 		for(int j = 0 ; j < record_size ; j++ ){
 			buf = '0' + (rand()%60);
 			write(file_d,&buf,1);
 		}
-			write(file_d, "\n", 2);			
+		write(file_d, "\n", 2);			
 	}
-
-
- 
-
-
 }

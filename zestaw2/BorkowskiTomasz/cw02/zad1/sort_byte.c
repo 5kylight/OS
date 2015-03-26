@@ -24,13 +24,12 @@ int main(int argc, char *argv[]){
 		printf("Too few arguments. Usage: %s input_filename record_size \n", argv[0] );
 		return 1 ; 
 	}
-	char *name = (char*) malloc(sizeof(char)*strlen(argv[1])+4);
+	char *name = (char*) malloc(sizeof(char) * strlen(argv[1]) + 1);
 	strcpy(name,argv[1]);
-   	strcat(name,"_sys");
+   	strcat(name,"1");
 
-	// bubble_sort_lib(argv[1], atoi(argv[2]));
-	bubble_sort_sys(argv[1], atoi(argv[2]));
-
+	bubble_sort_lib(argv[1], atoi(argv[2]));
+	bubble_sort_sys(name, atoi(argv[2]));
 
 }
 
@@ -55,6 +54,7 @@ void bubble_sort_lib(char *filename, size_t record_size){
    	char *buff2 = (char*)malloc(sizeof(char)*record_size);
 
    	// Counting elements and copy file
+   	int w;
    	int n = 0 ;
    	char *copy_filename = (char*) malloc(sizeof(char)*(strlen(filename)+5));
    	strcpy(copy_filename,filename);
@@ -67,16 +67,15 @@ void bubble_sort_lib(char *filename, size_t record_size){
 	}
 
 
-	while(fread(buff1,sizeof(char),record_size,file) > 0 && strlen(buff1)==record_size){
+	while(fread(buff1,sizeof(char),record_size,file) > 0 ){
 		++n;
 		fwrite(buff1, sizeof(char),record_size,copy_file);
 	}
+	w = n;
 	fclose(copy_file);
-	fseek(file,0,0);
-	int flag = 1;
+	fseek(file, 0, 0);
 
-	while(n > 0 && flag){
-		flag = 0;
+	while(n > 0 ){
 		while( fread(buff1,sizeof(char),record_size,file) > 0 
 		&& fread(buff2,sizeof(char),record_size,file) > 0){
 			fseek(file,(-2*record_size),1);
@@ -85,7 +84,6 @@ void bubble_sort_lib(char *filename, size_t record_size){
 				fwrite(buff1, sizeof(char),record_size,file);
 				fwrite(buff2, sizeof(char),record_size,file);
 			} else{
-				flag = 1;
 				fwrite(buff2, sizeof(char),record_size,file);
 				fwrite(buff1, sizeof(char),record_size,file);
 			}
@@ -102,12 +100,11 @@ void bubble_sort_lib(char *filename, size_t record_size){
 		printf("Time error\n");
    	
 
-	printf("Bubble sorting  file using library funs with %d record size took: \n",(int) record_size);
+	printf("Bubble sorting %d-file using library funs with %d record size took: \n",w,(int) record_size);
 	print_time_info(stop_time - start_time, &start_tms, &stop_tms);
 }
 
 void bubble_sort_sys(char *filename, size_t record_size){
-
 	/* Prepare to  measuring time */
 	struct tms start_tms, stop_tms;
    	clock_t start_time, stop_time;
@@ -132,7 +129,7 @@ void bubble_sort_sys(char *filename, size_t record_size){
    	char *copy_filename = (char*) malloc(sizeof(char)*(strlen(filename)+5));
    	strcpy(copy_filename,filename);
    	strcat(copy_filename,".copy");
-   	int copy_file = open(copy_filename, O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP  );
+   	int copy_file = open(copy_filename, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IRGRP  );
 
    	if(copy_file < 0 ){
 		printf("Can't open file for write copy!\n");
@@ -140,15 +137,14 @@ void bubble_sort_sys(char *filename, size_t record_size){
 	}
 
    	int n = 0 ;
-	while(read(file, buff1,record_size) > 0 && strlen(buff1)==record_size){
+	while(read(file, buff1, record_size) > 0) {
 		++n;
 		write(copy_file, buff1, record_size);
 	}
-	printf("%d\n", n);
+	int w = n;
 
 	close(copy_file);
 	lseek(file,0,SEEK_SET);
-	int flag = 1;
 
 	// while(n > 0 && flag){
 	while(n > 0 ){
@@ -162,7 +158,6 @@ void bubble_sort_sys(char *filename, size_t record_size){
 				write(file, buff1,record_size);
 				write(file, buff2,record_size);
 			} else{
-				flag = 1;
 				write(file, buff2,record_size);
 				write(file, buff1,record_size);
 			}
@@ -179,7 +174,7 @@ void bubble_sort_sys(char *filename, size_t record_size){
 		printf("Time error\n");
    	
 
-	printf("Bubble sorting file using system funs with %d record size took: \n",(int) record_size);
+	printf("Bubble sorting %d-file using system funs with %d record size took: \n",w,(int) record_size);
 	print_time_info(stop_time - start_time, &start_tms, &stop_tms);
 
 }

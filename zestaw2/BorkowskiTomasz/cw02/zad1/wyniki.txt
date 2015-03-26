@@ -1,0 +1,64 @@
+Bubble sorting 2000-file using library funs with 4 record size took: 
+		Real time is:  	8.54
+		User time is:  	1.58
+		System time is:	6.95
+Bubble sorting 2000-file using system funs with 4 record size took: 
+		Real time is:  	12.91
+		User time is:  	0.50
+		System time is:	12.41
+Bubble sorting 3000-file using library funs with 4 record size took: 
+		Real time is:  	19.32
+		User time is:  	3.39
+		System time is:	15.92
+Bubble sorting 3000-file using system funs with 4 record size took: 
+		Real time is:  	28.03
+		User time is:  	1.31
+		System time is:	26.72
+Bubble sorting 2000-file using library funs with 512 record size took: 
+		Real time is:  	16.07
+		User time is:  	3.14
+		System time is:	12.93
+Bubble sorting 2000-file using system funs with 512 record size took: 
+		Real time is:  	19.54
+		User time is:  	0.90
+		System time is:	18.63
+Bubble sorting 3000-file using library funs with 512 record size took: 
+		Real time is:  	22.47
+		User time is:  	4.34
+		System time is:	18.12
+Bubble sorting 3000-file using system funs with 512 record size took: 
+		Real time is:  	28.48
+		User time is:  	1.20
+		System time is:	27.29
+Bubble sorting 2000-file using library funs with 4096 record size took: 
+		Real time is:  	18.09
+		User time is:  	2.17
+		System time is:	15.90
+Bubble sorting 2000-file using system funs with 4096 record size took: 
+		Real time is:  	15.79
+		User time is:  	0.60
+		System time is:	15.17
+Bubble sorting 3000-file using library funs with 4096 record size took: 
+		Real time is:  	41.10
+		User time is:  	5.10
+		System time is:	35.98
+Bubble sorting 3000-file using system funs with 4096 record size took: 
+		Real time is:  	36.05
+		User time is:  	1.29
+		System time is:	34.76
+Bubble sorting 2000-file using library funs with 8192 record size took: 
+		Real time is:  	29.55
+		User time is:  	2.57
+		System time is:	26.97
+Bubble sorting 2000-file using system funs with 8192 record size took: 
+		Real time is:  	24.27
+		User time is:  	0.58
+		System time is:	23.67
+Bubble sorting 3000-file using library funs with 8192 record size took: 
+		Real time is:  	66.71
+		User time is:  	6.13
+		System time is:	60.56
+Bubble sorting 3000-file using system funs with 8192 record size took: 
+		Real time is:  	53.98
+		User time is:  	1.30
+		System time is:	52.66
