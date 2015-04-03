@@ -1,12 +1,22 @@
-all: forking_tests run_tests
+all: forking_tests_* run_tests
 CC = gcc
-CFLAGS = -std=c99 -Wall -pedantic
+CFLAGS =-g -std=c99 -Wall -pedantic
 
 
-forking_tests: forking_tests.c
+forking_tests_clone: forking_tests.c
+	$(CC) $(CFLAGS) $^ -o $@ -DCLONE
+	
+forking_tests_vclone: forking_tests.c
+	$(CC) $(CFLAGS) $^ -o $@ -DVCLONE
+
+forking_tests_fork: forking_tests.c
+	$(CC) $(CFLAGS) $^ -o $@ -DFORK
+
+forking_tests_vfork: forking_tests.c
+	$(CC) $(CFLAGS) $^ -o $@ -DVFORK
 
 run_tests:
-	./forking_tests
+	./forking_tests_* 
 
 clean:
-	rm forking_tests
+	rm forking_tests_*
