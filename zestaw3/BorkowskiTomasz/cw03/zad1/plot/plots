@@ -1,0 +1,117 @@
+# sum of real for child and parent 
+set title "Sum of children and parent real time" 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'both_real.svg'
+plot "../res/clone_both_real" with lines lw 2 title "Clone",	"../res/vclone_both_real" with lines lw 2 title "Vclone",	"../res/vfork_both_real" with lines lw 2 title "Vfork",	"../res/fork_both_real" with lines lw 2 title "Fork"
+unset output
+
+
+# Sum of sum usr + sys time for parent and child
+set title "Sum of parent and children User and system Time " 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'both_sum.svg'
+plot "../res/clone_both_sum" with lines lw 2 title "Clone",	"../res/vclone_both_sum" with lines lw 2 title "Vclone",	"../res/vfork_both_sum" with lines lw 2 title "Vfork",	"../res/fork_both_sum" with lines lw 2 title "Fork"
+unset output
+
+
+# clone Sum of system of parent and childs process
+set title "Sum of parent and children system time" 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'both_sys.svg'
+plot "../res/clone_both_sys" with lines lw 2 title "Clone",	"../res/vclone_both_sys" with lines lw 2 title "Vclone",	"../res/vfork_both_sys" with lines lw 2 title "Vfork",	"../res/fork_both_sys" with lines lw 2 title "Fork"
+unset output
+
+
+
+
+#  Sum of user timeof parent and childs process
+set title "Sum of parent and childern User time" 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'both_usr.svg'
+plot "../res/clone_both_usr" with lines lw 2 title "Clone",	"../res/vclone_both_usr" with lines lw 2 title "Vclone",	"../res/vfork_both_usr" with lines lw 2 title "Vfork",	"../res/fork_both_usr" with lines lw 2 title "Fork"
+unset output
+
+
+
+#  Real time childs process
+set title "Children Real time" 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'child_real.svg'
+plot "../res/clone_child_real" with lines lw 2 title "Clone",	"../res/vclone_child_real" with lines lw 2 title "Vclone",	"../res/vfork_child_real" with lines lw 2 title "Vfork",	"../res/fork_child_real" with lines lw 2 title "Fork"
+unset output
+
+#  Sum usr and system time for childs process
+set title "Sum of Childrens User and System time" 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'child_sum.svg'
+plot "../res/clone_child_sum" with lines lw 2 title "Clone",	"../res/vclone_child_sum" with lines lw 2 title "Vclone",	"../res/vfork_child_sum" with lines lw 2 title "Vfork",	"../res/fork_child_sum" with lines lw 2 title "Fork"
+unset output
+
+#  System time for childs process
+set title "Children System time" 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'child_sys.svg'
+plot "../res/clone_child_sys" with lines lw 2 title "Clone",	"../res/vclone_child_sys" with lines lw 2 title "Vclone",	"../res/vfork_child_sys" with lines lw 2 title "Vfork",	"../res/fork_child_sys" with lines lw 2 title "Fork"
+unset output
+
+#  User time for childs process
+set title "Children user time" 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'child_usr.svg'
+plot "../res/clone_child_usr" with lines lw 2 title "Clone",	"../res/vclone_child_usr" with lines lw 2 title "Vclone",	"../res/vfork_child_usr" with lines lw 2 title "Vfork",	"../res/fork_child_usr" with lines lw 2 title "Fork"
+unset output
+
+
+
+#  Sum usr and system time for parent process
+set title "Sum of parent user and system time" 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'parent_sum.svg'
+plot "../res/clone_parent_sum" with lines lw 2 title "Clone",	"../res/vclone_parent_sum" with lines lw 2 title "Vclone",	"../res/vfork_parent_sum" with lines lw 2 title "Vfork",	"../res/fork_parent_sum" with lines lw 2 title "Fork"
+unset output
+
+#  System time for parent process
+set title "Parent System time " 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'parent_sys.svg'
+plot "../res/clone_parent_sys" with lines lw 2 title "Clone",	"../res/vclone_parent_sys" with lines lw 2 title "Vclone",	"../res/vfork_parent_sys" with lines lw 2 title "Vfork",	"../res/fork_parent_sys" with lines lw 2 title "Fork"
+unset output
+
+#  User time for parent process
+set title "Parent User time " 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'parent_usr.svg'
+plot "../res/clone_parent_usr" with lines lw 2 title "Clone",	"../res/vclone_parent_usr" with lines lw 2 title "Vclone",	"../res/vfork_parent_usr" with lines lw 2 title "Vfork",	"../res/fork_parent_usr" with lines lw 2 title "Fork"
+unset output
+
+
+#  Real time parent process
+set title "Parent Real time " 
+set xlabel "Number of processes"
+set ylabel "Time [s] "
+set terminal svg size 1024,576 enhanced background rgb 'white'
+set output 'parent_real.svg'
+plot "../res/clone_parent_real" with lines lw 2 title "Clone",	"../res/vclone_parent_real" with lines lw 2 title "Vclone",	"../res/vfork_parent_real" with lines lw 2 title "Vfork",	"../res/fork_parent_real" with lines lw 2 title "Fork"
+unset output
