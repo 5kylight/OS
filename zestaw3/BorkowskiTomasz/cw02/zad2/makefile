@@ -1,9 +1,15 @@
-all: info_files
-CC=gcc 
-CFLAGS= -g -std=gnu99 -Wall -pedantic 
+all: file_counter run_tests
+CC = gcc
+CFLAGS = -std=gnu99 -Wall -pedantic
 
-info_files: info_files.c
+
+
+file_counter: file_counter.c
 	$(CC) $(CFLAGS) $^ -o $@
 
+run_tests:
+	./file_counter ~/Pulpit/MOWNiT
+run_tests_w:
+	./file_counter ~/Pulpit/MOWNiT -w
 clean:
-	rm info_files
+	rm file_counter
