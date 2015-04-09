@@ -32,7 +32,7 @@ int main(int argc, char *argv[]){
 		}
 	}
 	
-	/* Try to open dir, if imposible print error and return */
+	/* Try to open dir, if impossible print error and return */
 	DIR *dir = opendir(path);
 	if(dir == NULL){
 		printf("\tCan't open file: %s\n", path);
