@@ -12,7 +12,6 @@
 #include <sched.h>
 #include <sys/resource.h>
 #define STACK_SIZE 1000
-// #define N 10000
 
 int forking(int);
 int vforking(int);
@@ -23,15 +22,9 @@ int process();
 int counter = 0; 
 
 
-int main(int argc, char *argv[]) { /* Prepare to measure time */
-	// /* Prepare measure time! */
-	// struct timeval tmp1, 
-	// 	real_parent, 
-	// 	real_child; 
+int main(int argc, char *argv[]) { 
 
-	// gettimeofday(&real_parent, NULL);
 
-	/* Time started */
  	int N;
  	N = atoi(argv[1]);
 
@@ -48,23 +41,6 @@ int main(int argc, char *argv[]) { /* Prepare to measure time */
 		/* Cloning as vforking test */
 		vcloning(N);
 	#endif		
-  	/* Setting up finish time */
-  	// gettimeofday(&tmp1,NULL);
-  	// real_parent.tv_sec = tmp1.tv_sec - real_parent.tv_sec;
-  	// real_parent.tv_usec = tmp1.tv_usec - real_parent.tv_usec;
-
-
-  	// /* Collection information for parent process */ 
-  	// struct rusage parent, child;
-  	// getrusage(RUSAGE_SELF, &parent);
-  	// getrusage(RUSAGE_CHILDREN, &child);
-
-
-  	// /* Printing info */
-
-   // // 	printf("[Main] took: \n");
-  	// // print_time_info(parent, child, real_parent, real_child);
-
 
 }
 
@@ -133,26 +109,25 @@ int vforking(int n)
 	gettimeofday(&real_parent, NULL);
 
 	/* Time started */
+	int status;	
 
-  	int status;	
+ 	pid_t pid;
+ 	for(int i = 0; i < n ; i++){
 
-   	pid_t pid;
-   	for(int i = 0; i < n ; i++){
+ 		gettimeofday(&tmp, NULL);
+ 		if((pid = vfork()) < 0)
+ 			printf("vForking error!\n");
+ 		else if(pid == 0){
+ 			counter++;
+ 			_exit(0);
+ 		} else {
+ 			waitpid(pid, &status, 0);
+ 			gettimeofday(&tmp1,	NULL);
+			real_child.tv_sec += tmp1.tv_sec - tmp.tv_sec;
+			real_child.tv_usec += tmp1.tv_usec - tmp.tv_usec;
+ 		}
 
-   		gettimeofday(&tmp, NULL);
-   		if((pid = vfork()) < 0)
-   			printf("vForking error!\n");
-   		else if(pid == 0){
-   			counter++;
-   			_exit(0);
-   		} else {
-   			waitpid(pid, &status, 0);
-   			gettimeofday(&tmp1,	NULL);
-  			real_child.tv_sec += tmp1.tv_sec - tmp.tv_sec;
-  			real_child.tv_usec += tmp1.tv_usec - tmp.tv_usec;
-   		}
-
-   	}
+ 	}
 
   	/* Printing info */
   	gettimeofday(&tmp1,NULL);
@@ -167,7 +142,6 @@ int vforking(int n)
 
 
   	/* Printing info */
-
    	printf("[Vforking fun] Counter = %d\n",counter);
   	print_time_info(parent, child, real_parent, real_child, n, "vfork");
 
@@ -180,6 +154,7 @@ int process(){
 }
 
 void cloning(int n){
+
 	/* Prepare measure time! */
 	struct timeval tmp, tmp1, 
 		real_parent, 
@@ -223,6 +198,7 @@ void cloning(int n){
 }
 
 void vcloning(int n){
+
 	/* Prepare measure time! */
 	struct timeval tmp, tmp1, 
 		real_parent, 
@@ -233,7 +209,6 @@ void vcloning(int n){
 	real_child.tv_sec = 0;
 
 	/* Time started */
-
    int status;
    char *stack;
    stack =(char*) malloc(STACK_SIZE);
@@ -260,7 +235,6 @@ void vcloning(int n){
 
 
   	/* Printing info */
-
    	printf("[VCloning fun] Counter = %d\n",counter);
   	print_time_info(parent, child, real_parent, real_child, n, "vclone");
 
@@ -271,17 +245,14 @@ void vcloning(int n){
 void print_time_info(struct rusage parent, struct rusage child, struct timeval real_parent, struct timeval real_child, int n, char *method){
 
 	struct timeval sys_parent, usr_parent, sys_child, usr_child;	
-	sys_parent.tv_sec = parent.ru_stime.tv_sec;
-  	sys_parent.tv_usec = parent.ru_stime.tv_usec;
-  	usr_parent.tv_sec = parent.ru_utime.tv_sec;
-  	usr_parent.tv_usec = parent.ru_utime.tv_usec;
+
+    sys_parent = parent.ru_stime;
+    usr_parent = parent.ru_utime;
 
   	/* Collecting times from childs */
 
-  	sys_child.tv_sec = child.ru_stime.tv_sec;
-  	sys_child.tv_usec = child.ru_stime.tv_usec;
-  	usr_child.tv_sec = child.ru_utime.tv_sec;
-  	usr_child.tv_usec = child.ru_utime.tv_usec;
+    sys_child = child.ru_stime;
+    usr_child = child.ru_utime;
 
   	char *tab[] = {"parent_sys", "parent_usr", "parent_real", "parent_sum",
   					"child_sys", "child_usr", "child_real", "child_sum",
@@ -300,55 +271,68 @@ void print_time_info(struct rusage parent, struct rusage child, struct timeval r
 
   	float x;
 
-  	printf("\t Parent sys time:     %f\n", x =   (float)(sys_parent.tv_sec + sys_parent.tv_usec/1000000.0));
+  	printf("\t Parent sys time:     %f\n", 
+        x = (float)(sys_parent.tv_sec + sys_parent.tv_usec/1000000.0));
   	fprintf(files[0], "%d %f\n", n, x);
 
-  	printf("\t Parent usr time:     %f\n", x = (float)(usr_parent.tv_sec + usr_parent.tv_usec/1000000.0));
+  	printf("\t Parent usr time:     %f\n", 
+        x = (float)(usr_parent.tv_sec + usr_parent.tv_usec/1000000.0));
   	fprintf(files[1], "%d %f\n", n, x);
 
-  	printf("\t Parent real time:    %f\n", x =  (float)(real_parent.tv_sec + real_parent.tv_usec/1000000.0));
+  	printf("\t Parent real time:    %f\n",
+        x =  (float)(real_parent.tv_sec + real_parent.tv_usec/1000000.0));
   	fprintf(files[2], "%d %f\n", n, x);
 
-  	printf("\t Parent sys+usr       %f\n\n", x =  (float)(sys_parent.tv_sec + sys_parent.tv_usec/1000000.0)+(float)(usr_parent.tv_sec + usr_parent.tv_usec/1000000.0));
+  	printf("\t Parent sys+usr       %f\n\n", 
+        x = (float)(sys_parent.tv_sec + sys_parent.tv_usec/1000000.0) 
+            + (float)(usr_parent.tv_sec + usr_parent.tv_usec/1000000.0));
   	fprintf(files[3], "%d %f\n", n, x);
 
   	/* Print sum */ 
 
-  	printf("\t Childrens sys time:  %f\n", x = (float)(sys_child.tv_sec + sys_child.tv_usec/1000000.0) );
+  	printf("\t Childrens sys time:  %f\n",
+         x = (float)(sys_child.tv_sec + sys_child.tv_usec/1000000.0) );
   	fprintf(files[4], "%d %f\n", n, x);
   	
-  	printf("\t Childrens usr time:  %f\n", x = (float)(usr_child.tv_sec + usr_child.tv_usec/1000000.0) );
+  	printf("\t Childrens usr time:  %f\n",
+        x = (float)(usr_child.tv_sec + usr_child.tv_usec/1000000.0) );
   	fprintf(files[5], "%d %f\n", n, x);
   	
-  	printf("\t Childrens real time: %f\n", x = (float)(real_child.tv_sec + real_child.tv_usec/1000000.0) );
+  	printf("\t Childrens real time: %f\n", 
+        x = (float)(real_child.tv_sec + real_child.tv_usec/1000000.0) );
   	fprintf(files[6], "%d %f\n", n, x);
 	
-	printf("\t Childrens sys+usr:   %f\n\n", x = (float)(sys_child.tv_sec + sys_child.tv_usec/1000000.0)+(float)(usr_child.tv_sec + usr_child.tv_usec/1000000.0));
-  	fprintf(files[7], "%d %f\n", n, x);
+    printf("\t Childrens sys+usr:   %f\n\n", 
+        x = (float)(sys_child.tv_sec + sys_child.tv_usec/1000000.0) 
+            + (float)(usr_child.tv_sec + usr_child.tv_usec/1000000.0));
+    fprintf(files[7], "%d %f\n", n, x);
 
 
-	printf("\t Child+Par sys time:  %f\n", x = (float)(sys_child.tv_sec + sys_child.tv_usec/1000000.0) + (sys_parent.tv_sec + sys_parent.tv_usec/1000000.0)); 
+  	printf("\t Child+Par sys time:  %f\n", 
+        x = (float)(sys_child.tv_sec + sys_child.tv_usec/1000000.0) 
+            + (sys_parent.tv_sec + sys_parent.tv_usec/1000000.0)); 
   	fprintf(files[8], "%d %f\n", n, x);
 
-  	printf("\t Child+Par usr time:  %f\n", x = (float)(usr_child.tv_sec + usr_child.tv_usec/1000000.0) + (usr_parent.tv_sec + usr_parent.tv_usec/1000000.0));
+  	printf("\t Child+Par usr time:  %f\n", 
+        x = (float)(usr_child.tv_sec + usr_child.tv_usec/1000000.0) 
+            + (usr_parent.tv_sec + usr_parent.tv_usec/1000000.0));
   	fprintf(files[9], "%d %f\n", n, x);
 
-  	printf("\t Child+Par real time: %f\n", x = (float)(real_child.tv_sec + real_child.tv_usec/1000000.0) + (real_parent.tv_sec + real_parent.tv_usec/1000000.0));
+  	printf("\t Child+Par real time: %f\n", 
+        x = (float)(real_child.tv_sec + real_child.tv_usec/1000000.0) 
+            + (real_parent.tv_sec + real_parent.tv_usec/1000000.0));
   	fprintf(files[10], "%d %f\n", n, x);
 
-	printf("\t Child+Par sys+usr:   %f\n", x = (float)(sys_child.tv_sec + sys_child.tv_usec/1000000.0)+(float)(usr_child.tv_sec + usr_child.tv_usec/1000000.0) + (sys_parent.tv_sec + sys_parent.tv_usec/1000000.0)+(float)(usr_parent.tv_sec + usr_parent.tv_usec/1000000.0));
+    printf("\t Child+Par sys+usr:   %f\n", 
+        x = (float)(sys_child.tv_sec + sys_child.tv_usec/1000000.0) 
+            + (float)(usr_child.tv_sec + usr_child.tv_usec/1000000.0) 
+            + (sys_parent.tv_sec + sys_parent.tv_usec/1000000.0) 
+            + (float)(usr_parent.tv_sec + usr_parent.tv_usec/1000000.0));
   	fprintf(files[11], "%d %f\n", n, x);
 
-
   	  for(int i = 0 ; i < 12; i++){
-  	
   		 fclose(files[i]);
   	}
-
-
-
-
-
 }
 
 
