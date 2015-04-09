@@ -114,7 +114,7 @@ int main(int argc, char *argv[]){
 	if(w_flag)
 		sleep(3);
 
-	/* If this was lunched by console exit(0) and print result */
+	/* If this was launched by console exit(0) and print result */
 	if(argc <= 2 || (w_flag && argc <= 3) ){
 		printf("Total files number in %s is %d\n",path, file_counter);
 		exit(0);
