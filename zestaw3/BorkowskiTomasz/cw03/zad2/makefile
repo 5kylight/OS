@@ -8,8 +8,8 @@ file_counter: file_counter.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 run_tests:
-	./file_counter ~/
+	./file_counter ~
 run_tests_w:
-	./file_counter ~/ -w
+	./file_counter ~ -w
 clean:
 	rm file_counter

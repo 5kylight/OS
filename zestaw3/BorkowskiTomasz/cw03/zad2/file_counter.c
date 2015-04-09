@@ -14,7 +14,7 @@ int p = 0;
 
 int main(int argc, char *argv[]){
 
-	/* Checking arugment nubmer*/
+	/* Checking arugment number*/
 	if(argc < 2){
 		printf("Usage %s <start_path> \n",argv[0] );
 		return 1;
@@ -35,17 +35,15 @@ int main(int argc, char *argv[]){
 	/* Try to open dir, if imposible print error and return */
 	DIR *dir = opendir(path);
 	if(dir == NULL){
-		printf("Can't open file %s\n", path);
+		printf("\tCan't open file: %s\n", path);
 		exit(-8);
 	}
 	struct dirent *current;
-
 	struct stat info;
 	char *full_path;
+	pid_t pid;
 
 	int file_counter = 0;
-
-	pid_t pid;
 	int counter = 0;
 
 	/* Reading directory */
@@ -65,31 +63,31 @@ int main(int argc, char *argv[]){
 
 		if(lstat(full_path, &info) >= 0){
 
+			/* Checing if this is regular file */
 			if(S_ISREG(info.st_mode)){
 				file_counter++;				
+
+			/* If directory */
 			} else if(S_ISDIR(info.st_mode)){
 
 				if((pid = fork()) >= 0 ){
 					if( pid == 0 ){
 						int returned = 0; 
 						if(w_flag)
-							returned = (execl(argv[0], argv[0], full_path, "-w","m", (char*)NULL));
+							returned = (execl(argv[0], argv[0], full_path, "-w",";", (char*)NULL));
 						else
-							returned = (execl(argv[0], argv[0], full_path, "m", (char*)NULL));
+							returned = (execl(argv[0], argv[0], full_path, ";", (char*)NULL));
 						exit(returned);
-					} else {
-						counter++;
-		
-			
-					} 
+					} else
+						counter++;		
 				} else {
 					printf("Forking error\n");
 					exit(-3);
 				}
 			}
-		} else {
-			printf("%s Can't open file\n", full_path);
-		}
+		} else 
+			printf("\t Can't open file: %s \n", full_path);
+		
 		free(full_path);
 	}
 
@@ -111,15 +109,17 @@ int main(int argc, char *argv[]){
 		}
 
 	}
+
+	/* If flag was setted wait for small period of time */
 	if(w_flag)
 		sleep(3);
 
-	if(argc <= 2){
-		printf("Total files number in %s \t\t is %d\n",path, file_counter);
-		// printf("I don't know why but I think I am mother process and I exit\n My argc is %d \n", argc);
+	/* If this was lunched by console exit(0) and print result */
+	if(argc <= 2 || (w_flag && argc <= 3) ){
+		printf("Total files number in %s is %d\n",path, file_counter);
 		exit(0);
+	} 
 
-	}
-	// printf("fExit wiht value %d \n", file_counter );
+	/* If this prog was runned by exec return number of files in this directory */
 	exit(file_counter);
 }	
