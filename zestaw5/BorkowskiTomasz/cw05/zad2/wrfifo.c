@@ -13,18 +13,17 @@
 Fun to get time in format: HH:MM:SS:NNNNNN
 where NNNNNN are miliseconds 
 */ 
-char *get_time()
+void get_time(char *hours)
 {
     struct timeval mytime;
     gettimeofday(&mytime, NULL);
     char *res = (char *) ctime(&(mytime.tv_sec));
-    char *hours = calloc(17, sizeof(char));
-    strncpy(hours, res+11, 8);
+    strncat(hours, res+11, 8);
     char *mili = calloc(7, sizeof(char));
-    sprintf(mili,"%d", (int) mytime.tv_usec/1000 );
+    sprintf(mili, "%d", (int) mytime.tv_usec/1000 );
     strcat(hours, ":");
     strcat(hours, mili);
-    return hours;
+    free(mili);
 }
 
 int
@@ -56,8 +55,7 @@ main(int argc, char *argv[])
 
 
     /* Getting time */
-    char *hour = get_time();
-    strcat(message, hour);
+    get_time(message);
     strcat(message, "\n\t");
     
     /* Add text to message */

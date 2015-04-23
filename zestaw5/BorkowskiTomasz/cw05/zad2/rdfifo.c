@@ -14,18 +14,17 @@
 /* Fun to get time in format: HH:MM:SS:NNNNNN
 where NNNNNN are miliseconds 
 */ 
-char *get_time()
+void get_time(char *hours)
 {
     struct timeval mytime;
     gettimeofday(&mytime, NULL);
     char *res = (char *) ctime(&(mytime.tv_sec));
-    char *hours = calloc(17, sizeof(char));
     strncpy(hours, res+11, 8);
     char *mili = calloc(7, sizeof(char));
-    sprintf(mili,"%d", (int) mytime.tv_usec/1000 );
+    sprintf(mili, "%d", (int) mytime.tv_usec/1000 );
     strcat(hours, ":");
     strcat(hours, mili);
-    return hours;
+    free(mili);
 }
 
 int
@@ -82,13 +81,16 @@ main(int argc, char *argv[])
     	buffer = (char *) malloc(to_read * sizeof(char));
 
     	n = read(fifo, buffer, to_read * sizeof(char));
+
         /* If message size is bigger than 2 */
         if(n > 2)
         {
-            char *current_time = get_time();
+            char *current_time = calloc(16, sizeof(char));
+            get_time(current_time);
 	    	printf("%s %s", current_time, buffer);
+	    	free(current_time);
         }
-        
+        free(buffer);
         /*
          Sleep a second to not use to much processor
          and prevent to be killed by system 
