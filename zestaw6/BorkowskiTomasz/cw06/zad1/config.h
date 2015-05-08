@@ -1,0 +1,12 @@
+#ifndef CONFIG_CHAT
+#define CONFIG_CHAT
+
+#define MAX_TEXT_SIZE 2048
+#define MAX_CLIENTS 10
+#define MAX_CLIENT_NAME 100
+#define SERVER_CLIENT 1
+#define CLIENT_SERVER 2
+
+#endif
+
+
