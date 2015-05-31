@@ -1,0 +1,6 @@
+#ifndef CONFIGURATION
+#define CONFIGURATION
+
+#define TASKS_LENGTH 10
+
+#endif
