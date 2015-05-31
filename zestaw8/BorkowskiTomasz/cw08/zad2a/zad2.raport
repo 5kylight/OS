@@ -1,0 +1,56 @@
+Aby ułatwić czytelność wprowadziłem oznaczania:
+	Wersja pierwsza - wysłnie sygnału do procesu, gdy żaden wątek nie ma zamaskowanego tego sygnału
+	Wersja druga - wysłanie sygnału do procesu, gdy główny wątek programu ma zamaskowany ten sygnał, a wszystkie pozostałe wątki nie
+	Wersja trzecia - wysłanie sygnału do procesu, gdy wszystkie wątki mają zainstalowaną niestandardową procedurę obsługi przerwania, która wypisuje informację o nadejściu tego sygnału oraz PID i TID danego wątku
+	Wersja czwarta - wysłanie sygnału do wątku z zamaskowanym tym sygnałem
+	Wersja piąta - wysłanie sygnału do wątku, w którym zmieniona jest procedura obsługi sygnału, jak przedstawiono w punkcie 3
+
+Zadanie a)
+
+	Badanie zachowania sygnału:
+		SIGKILL - 9
+			Dla wersji pierwszej zostaje unicestwiony
+			Wersja druga - zostaje unicestwiony
+			Wersja trzecia - N/A - sigaction nie może ustawić obsługi
+			Wersja czwarta -zostaje unicestwiony
+			Wersja piąta - N/A - sigaction nie może ustawić obsługi
+		SIGTERM - 15
+			Wersja pierwsza - zostaje wypisany raz komunikat - zakończony
+			Wersja druga - zostaje raz wypisany komunikat - zakończony
+			Wersja trzecia - Zostaje wypisana raz informacja :
+				 "Greetings from thread  I recived 15 my info: 
+					TID: 139897408878400 
+					PID: 16016"
+			Wersja czwarta - sygnał zostaje zignorowany
+			Wersja piąta - zostaje wypisany komunikat z każdego wątku
+				"Greetings from thread  I recived 15 my info: 
+					TID: 140174984861440 
+					PID: 16318"
+		SIGSTOP - 19
+			Wersja pierwsza - wypisuje:
+				 "[2]+  Stopped                 ./search 4 ../zad1a/out 4 Z 1 19"
+			Wersja druga - patrz wersja pierwsza
+			Wersja trzecia -  sigaction nie może ustawić obsługi
+			Wersja czwarta - patrz wersja druga
+			Wersja piąta - N/A - sigaction nie może ustawić obsługi
+
+		SIGUSR1 - 10
+			Wersja pierwsza - zostaje wypisany komunikat: 
+				'Sygnał użytkownika 1'
+			Wersja druga - - zostaje wypisany komunikat: 
+				'Sygnał użytkownika 1'
+			Wersja trzecia - Zostaje wypisana informacja raz:
+				 "Greetings from thread  I recived 10 my info: 
+					TID: 139853747283776 
+					PID: 16748"
+			Wersja czwarta - sygnał zostaje zignorowany
+			Wersja piąta - zostaje wypisany komunikat z każdego wątku
+				"Greetings from thread  I recived 10 my info: 
+					TID: 140433004132096 
+					PID: 16753"
+
+Zadanie b)
+
+	Wszystkie wątki zostają zatrzymane.
+
+Testy zostały przeprowadzone na systemie Ubuntu 14.04 LTS. Samsung Ativ Book 5.
